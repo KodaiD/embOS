@@ -1,2 +1,4 @@
 *.o
 tools/h8write
+kzload
+kzload.elf
