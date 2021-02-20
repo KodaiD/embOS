@@ -2,7 +2,7 @@
 OUTPUT_ARCH(h8300h)
 ENTRY("_start")
 
-SECTION
+SECTIONS
 {
     . = 0x0;
 
