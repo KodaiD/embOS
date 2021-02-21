@@ -40,8 +40,10 @@ SECTIONS
     } > data AT> rom
 
     .bss : {
+      _bss_start = . ;
       *(.bss)
       *(COMMON)
+      _ebss = . ;
     } > data AT> rom
 
     . = ALIGN(4);
