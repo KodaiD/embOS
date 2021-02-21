@@ -65,28 +65,28 @@ long xmodem_recv(char *buf)
     if (!receiving)
       xmodem_wait();
 
-      c = serial_recv_byte(SERIAL_DEFAULT_DEVICE);
+    c = serial_recv_byte(SERIAL_DEFAULT_DEVICE);
 
-      if (c == XMODEM_EOF) {
-        serial_send_byte(SERIAL_DEFAULT_DEVICE, XMODEM_ACK);
-        break;
-      } else if (c == XMODEM_CAN) {
-        return -1;
-      } else if (c == XMODEM_SOH) {
-        receiving++;
-        r = xmodem_read_block(block_number, buf);
-        if (r < 0) {
-          serial_send_byte(SERIAL_DEFAULT_DEVICE, XMODEM_NAK);
-        } else {
-          block_number++;
-          size += r;
-          buf  += r;
-          serial_send_byte(SERIAL_DEFAULT_DEVICE, XMODEM_ACK);
-        }
+    if (c == XMODEM_EOF) {
+      serial_send_byte(SERIAL_DEFAULT_DEVICE, XMODEM_ACK);
+      break;
+    } else if (c == XMODEM_CAN) {
+      return -1;
+    } else if (c == XMODEM_SOH) {
+      receiving++;
+      r = xmodem_read_block(block_number, buf);
+      if (r < 0) {
+        serial_send_byte(SERIAL_DEFAULT_DEVICE, XMODEM_NAK);
       } else {
-        if (receiving)
-          return -1;
+        block_number++;
+        size += r;
+        buf  += r;
+        serial_send_byte(SERIAL_DEFAULT_DEVICE, XMODEM_ACK);
       }
+    } else {
+      if (receiving)
+        return -1;
+    }
   }
 
   return size;
