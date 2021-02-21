@@ -37,18 +37,18 @@ static int xmodem_read_block(unsigned char block_number, char *buf)
   if (block_num != block_number)
     return -1;
 
-  block_num ^= serial_is_recv_byte(SERIAL_DEFAULT_DEVICE); // 反転したブロック番号の受信 XOR
+  block_num ^= serial_recv_byte(SERIAL_DEFAULT_DEVICE); // 反転したブロック番号の受信 XOR
   if (block_num != 0xff)
     return -1;
 
   check_sum = 0;
   for (i = 0; i < XMODEM_BLOCK_SIZE; i++) {
-    c = serial_is_recv_byte(SERIAL_DEFAULT_DEVICE);
+    c = serial_recv_byte(SERIAL_DEFAULT_DEVICE);
     *(buf++) = c;
     check_sum += c;
   }
 
-  check_sum ^= serial_is_recv_byte(SERIAL_DEFAULT_DEVICE); // XOR
+  check_sum ^= serial_recv_byte(SERIAL_DEFAULT_DEVICE); // XOR
   if (check_sum)
     return -1;
 
