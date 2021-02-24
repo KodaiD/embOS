@@ -1,1 +1,11 @@
 *.o
+kzload
+kzload.elf
+kzload.mot
+h8write
+kz_h8write
+kz_xmodem
+
+tools/h8write/h8write
+tools/kz_h8write/kz_h8write
+tools/kz_xmodem/kz_xmodem
