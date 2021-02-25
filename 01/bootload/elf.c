@@ -20,8 +20,8 @@ struct elf_header {
   long section_header_offset;   /* セクションヘッダテーブルの位置 */
   long flags;                   /* 各種フラグ */
   short header_size;            /* ELFヘッダのサイズ */
-  short program_header_num;     /* プログラムヘッダのサイズ */
-  short program_header_size;    /* プログラムヘッダの個数 */
+  short program_header_size;     /* プログラムヘッダのサイズ */
+  short program_header_num;    /* プログラムヘッダの個数 */
   short section_header_size;    /* セクションヘッダのサイズ */
   short section_header_num;     /* セクションヘッダの個数 */
   short section_name_index;     /* セクション名を格納するセクション */
@@ -45,7 +45,7 @@ static int elf_check(struct elf_header *header)
 
   if (header->id.class    != 1) return -1; /* ELF32 */
   if (header->id.format   != 2) return -1; /* Big endian */
-  if (header->version     != 1) return -1; /* version 1 */
+  if (header->id.version  != 1) return -1; /* version 1 */
   if (header->type        != 2) return -1; /* Executable file */
   if (header->version     != 1) return -1; /* version 1 */
 
@@ -68,8 +68,7 @@ static int elf_load_program(struct elf_header *header)
       continue;
 
     memcpy((char *)phdr->physical_addr, (char *)header + phdr->offset, phdr->file_size);
-    memset((char *)phdr->physical_addr + phdr->file_size, 0,
-      phdr->memory_size - phdr->file_size);
+    memset((char *)phdr->physical_addr + phdr->file_size, 0, phdr->memory_size - phdr->file_size);
   }
 
   return 0;
@@ -79,11 +78,17 @@ char *elf_load(char *buf)
 {
   struct elf_header * header = (struct elf_header *)buf;
 
+  puts("done: cast\n");
+
   if (elf_check(header) < 0)
     return NULL;
 
+  puts("done: elf check\n");
+
   if (elf_load_program(header) < 0)
     return NULL;
+
+  puts("done: elf load program\n");
 
   return (char *)header->entry_point;
 }
