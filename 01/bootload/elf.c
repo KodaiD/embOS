@@ -75,7 +75,7 @@ static int elf_load_program(struct elf_header *header)
   return 0;
 }
 
-char elf_load(char *buf)
+char *elf_load(char *buf)
 {
   struct elf_header * header = (struct elf_header *)buf;
 

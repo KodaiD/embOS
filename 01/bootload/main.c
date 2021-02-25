@@ -76,6 +76,7 @@ int main(void)
       dump(loadbuf, size);
     } else if (!strcmp(buf, "run")) {
       entry_point = elf_load(loadbuf);
+      puts(entry_point);
       if (!entry_point) {
         puts("run error\n");
       } else {
